@@ -1,15 +1,15 @@
 package bo.edu.ucb.sis213;
 
 import java.sql.Connection;
+import javax.swing.SwingUtilities;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-
 public class App {
-
+    
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 3306;
     private static final String USER = "root";
@@ -19,6 +19,21 @@ public class App {
     private static int  pinActual;
     private static int  usuarioId;  
     private static double saldo; 
+    
+    
+    public static void main(String[] args) {
+        try (Connection connection = getConnection()) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    new atmApp(connection);
+                }
+            });
+        } catch (SQLException ex) {
+            System.err.println("No se pudo conectar");
+            ex.printStackTrace();
+            System.exit(1);
+        }
+    }
 
     public static Connection getConnection() throws SQLException {
         String jdbcUrl = String.format("jdbc:mysql://%s:%d/%s", HOST, PORT, DATABASE);
@@ -31,60 +46,9 @@ public class App {
         return DriverManager.getConnection(jdbcUrl, USER, PASSWORD);
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int intentos = 3;
+   
 
-        System.out.println("Bienvenido al Cajero Automático.");
-
-        Connection connection = null;
-        try {
-            connection = getConnection();
-        } catch (SQLException ex) {
-            System.err.println("No se pudo conectar");
-            ex.printStackTrace();
-            System.exit(1);
-        }
-
-        while (intentos > 0) {
-            System.out.println("Ingrese su PIN de 4 dígitos: ");
-            int pinIngresado = scanner.nextInt();
-            if (validarPIN(connection, pinIngresado)) {
-                pinActual = pinIngresado;
-                mostrarMenu(connection);
-                break;
-            } else {
-                intentos--;
-                if (intentos > 0) {
-                    System.out.println("PIN incorrecto. Le quedan " + intentos + " intentos");
-                } else {
-                    System.out.println("PIN incorrecto. Ha excedido el número de intentos");
-                    System.exit(0);
-                }
-            }
-        }
-    }
-
-    public static boolean validarPIN (Connection connection, int pin){
-        String query = "SELECT id, saldo FROM usuarios WHERE pin = ?";
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, pin);
-            ResultSet resultSet = preparedStatement.executeQuery();
-    
-            if(resultSet.next()){
-                usuarioId = resultSet.getInt("id");
-                saldo = resultSet.getDouble("saldo");
-                return true;
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static void mostrarMenu(Connection connection) {
+    public static void mostrarMenu(Connection connection, String username)  {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenú Principal:");
@@ -168,7 +132,7 @@ public class App {
             }
         }
     }
-    
+
     public static void realizarRetiro(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a retirar: $");
@@ -198,7 +162,7 @@ public class App {
             }
         }
     }
-    
+
     public static void registrarOperacion(Connection connection, String tipoOperacion, double cantidad) {
         try {
             String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
@@ -268,4 +232,21 @@ public class App {
             System.out.println("PIN incorrecto.");
         }
     }
+    public static int validarCredenciales(Connection connection, String username, String password) {
+        String query = "SELECT id FROM usuarios WHERE username = ? AND password = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+    
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // Indicador de credenciales incorrectas
+    }
+    
 }
