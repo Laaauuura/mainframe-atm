@@ -23,9 +23,23 @@ public class atmApp {
         this.connection = connection;
         initializeLoginScreen();
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Connection connection = App.getConnection();
+                    new atmApp(connection);
+                } catch (SQLException e) {
+                    System.err.println("No se pudo conectar");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
     
     private void initializeLoginScreen() {
-        frame = new JFrame("Login - ATM Simulator");
+        frame = new JFrame("Login ");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLayout(new BorderLayout());
@@ -35,7 +49,7 @@ public class atmApp {
         loginPanel.setBackground(new Color(220, 220, 220)); // Light gray panel background
         loginPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     
-        JLabel titleLabel = new JLabel("ATM Simulator");
+        JLabel titleLabel = new JLabel("ATM");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
     
@@ -43,7 +57,7 @@ public class atmApp {
         usernameField = new JTextField();
     
         JLabel passwordLabel = new JLabel("Password:");
-        passwordField = new JPasswordField();
+        passwordField = new JTextField();
     
         JButton loginButton = new JButton("Login");
         loginButton.setBackground(new Color(0, 102, 204)); // Dark blue button background
@@ -52,14 +66,14 @@ public class atmApp {
     
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
-                String password = passwordField.getText();
+                String user = usernameField.getText();
+                String pass= passwordField.getText();
     
-                int usuarioId = App.validarCredenciales(connection, username, password);
+                int usuarioId = App.validarCredenciales(connection, user, pass);
     
                 if (usuarioId >= 0) {
                     initializeMainMenu(usuarioId);
-                    frame.dispose();
+                    //frame.dispose();
                 } else {
                     showResultScreen("Error", "Credenciales incorrectas");
                 }
@@ -158,17 +172,5 @@ public class atmApp {
         resultFrame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Connection connection = App.getConnection();
-                    new atmApp(connection);
-                } catch (SQLException e) {
-                    System.err.println("No se pudo conectar");
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+    
 }
