@@ -9,10 +9,10 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;  // Importar la clase Connection desde el paquete java.sql
 
 public class atmApp {
-
+    
     private JFrame frame;
     private JTextField usernameField;
-    private JPasswordField passwordField;
+    private JTextField passwordField;
 
     private Connection connection;
     private int usuarioId; // Agregado para evitar errores de símbolo
@@ -23,29 +23,41 @@ public class atmApp {
         this.connection = connection;
         initializeLoginScreen();
     }
-
+    
     private void initializeLoginScreen() {
         frame = new JFrame("Login - ATM Simulator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
-        frame.setLayout(new GridLayout(3, 2));
-
+        frame.setSize(400, 300);
+        frame.setLayout(new BorderLayout());
+        frame.getContentPane().setBackground(new Color(245, 245, 245)); // Light gray background
+    
+        JPanel loginPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        loginPanel.setBackground(new Color(220, 220, 220)); // Light gray panel background
+        loginPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+        JLabel titleLabel = new JLabel("ATM Simulator");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+    
         JLabel usernameLabel = new JLabel("Username:");
         usernameField = new JTextField();
-
+    
         JLabel passwordLabel = new JLabel("Password:");
         passwordField = new JPasswordField();
-
+    
         JButton loginButton = new JButton("Login");
+        loginButton.setBackground(new Color(0, 102, 204)); // Dark blue button background
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFocusPainted(false);
+    
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText();
-                char[] passwordChars = passwordField.getPassword();
-                String password = new String(passwordChars);
-
+                String password = passwordField.getText();
+    
                 int usuarioId = App.validarCredenciales(connection, username, password);
-                
-                if (usuarioId != -1) {
+    
+                if (usuarioId >= 0) {
                     initializeMainMenu(usuarioId);
                     frame.dispose();
                 } else {
@@ -53,16 +65,20 @@ public class atmApp {
                 }
             }
         });
-
-        frame.add(usernameLabel);
-        frame.add(usernameField);
-        frame.add(passwordLabel);
-        frame.add(passwordField);
-        frame.add(new JLabel()); // Espacio vacío
-        frame.add(loginButton);
-
+    
+        loginPanel.add(titleLabel);
+        loginPanel.add(new JLabel()); // Empty cell
+        loginPanel.add(usernameLabel);
+        loginPanel.add(usernameField);
+        loginPanel.add(passwordLabel);
+        loginPanel.add(passwordField);
+        loginPanel.add(new JLabel()); // Empty cell
+        loginPanel.add(loginButton);
+    
+        frame.add(loginPanel, BorderLayout.CENTER);
         frame.setVisible(true);
     }
+    
 
     
     private void initializeMainMenu(int usuarioId) {
