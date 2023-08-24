@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    password INT(255) NOT NULL,
     saldo DOUBLE NOT NULL
 );
 
@@ -19,15 +19,15 @@ CREATE TABLE IF NOT EXISTS historico (
 
 -- Inserciones de ejemplo en la tabla 'usuarios'
 INSERT INTO usuarios (username, password, saldo) VALUES
-('juanperez', '1234', 1000.0),
-('anaramirez', '5678', 2500.0),
-('carlosgomez', '9812', 500.0),
-('martatorres', '3456', 750.0),
-('luisafernandez', '7890', 3000.0);
+('juanperez', 1234, 1000.0),
+('anaramirez', 5678, 2500.0),
+('carlosgomez', 9812, 500.0),
+('martatorres', 3456, 750.0),
+('luisafernandez', 7890, 3000.0);
 
 -- Inserciones de ejemplo en la tabla 'historico'
-INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (1, 'juanperez', 'deposito', 1000.0);
-INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (2, 'anaramirez', 'deposito', 2500.0);
-INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (3, 'carlosgomez', 'deposito', 500.0);
-INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (4, 'martatorres', 'deposito', 750.0);
-INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (5, 'luisafernandez', 'deposito', 3000.0);
+INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (1, 'juanperez', 'Deposito', 1000.0);
+INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (2, 'anaramirez', 'Deposito', 2500.0);
+INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (3, 'carlosgomez', 'Deposito', 500.0);
+INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (4, 'martatorres', 'Deposito', 750.0);
+INSERT INTO historico (usuario_id, username, tipo_operacion, cantidad) VALUES (5, 'luisafernandez', 'Deposito', 3000.0);
