@@ -103,7 +103,7 @@ public class App {
 
     }
     public  void mostrarHistorial(int usuarioId) {
-        his.obtenerHistorial(usuarioId);
+        his.operacionesHis(usuarioId);
 
     }
 

@@ -15,16 +15,23 @@ public class loginAtm extends JFrame {
     App app = new App();
 
     public loginAtm() {
+
+        
         setTitle("Bienvenido a MiBanco");
         setSize(600, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        ImageIcon backgroundImageIcon = new ImageIcon("src/main/java/bo/edu/ucb/sis213/images/fondo.jpg");
+        JLabel backgroundLabel = new JLabel(backgroundImageIcon);
+        backgroundLabel.setBounds(0, 0, 600, 400);
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(5, 5, 5, 5);
 
         JLabel tituloLabel = new JLabel("Bienvenido a MiBanco");
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 24)); 
         tituloLabel.setHorizontalAlignment(JLabel.CENTER);
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -60,6 +67,7 @@ public class loginAtm extends JFrame {
         constraints.gridwidth = 2;
         panel.add(botonIniciarSesion, constraints);
 
+
         botonIniciarSesion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String usuario = usuarioField.getText();
@@ -91,6 +99,8 @@ public class loginAtm extends JFrame {
             
         });
 
+       
+        //add(backgroundLabel); // Agregar la etiqueta de fondo
         add(panel);
     }
 }

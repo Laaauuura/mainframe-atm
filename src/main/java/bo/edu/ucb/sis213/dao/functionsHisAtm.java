@@ -18,6 +18,17 @@ public class functionsHisAtm {
             System.exit(1);
         }
     }
+    public void operacionesHis(int usuarioId){
+        try{
+            String query = "SELECT tipo_operacion FROM hisorico WHERE usuario_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, usuarioId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+        }  catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+    }
 
     public  void registrarOperacion(int usuarioId, String tipoOperacion, double cantidad) {
             try {
