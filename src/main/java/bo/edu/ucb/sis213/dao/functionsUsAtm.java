@@ -37,58 +37,28 @@ public class functionsUsAtm {
         return saldoActual;
     }
 
-    public  boolean realizarDeposito(int usuarioId, double cantidad) {
+    public  void realizarOp(int usuarioId, double cantidad) {
         try {
-            String updateQuery = "UPDATE usuarios SET saldo = saldo + ? WHERE id = ?";
+            String updateQuery = "UPDATE usuarios SET saldo = ? WHERE id = ?";
             PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
             updateStatement.setDouble(1, cantidad);
             updateStatement.setInt(2, usuarioId);
-            int rowsAffected = updateStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                return true;
-            }
+            updateStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return false;
     }
 
-    public  boolean realizarRetiro(int usuarioId, double cantidad) {
-        try {
-            String updateQuery = "UPDATE usuarios SET saldo = saldo - ? WHERE id = ?";
-            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-            updateStatement.setDouble(1, cantidad);
-            updateStatement.setInt(2, usuarioId);
-            int rowsAffected = updateStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    public  boolean cambiarPIN(int usuarioId, int nuevoPin) {
+    public  void cambiarPIN(int usuarioId, int nuevoPin) {
         try {
             String updateQuery = "UPDATE usuarios SET password = ? WHERE id = ?";
             PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
             updateStatement.setInt(1, nuevoPin);
             updateStatement.setInt(2, usuarioId);
-            int rowsAffected = updateStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                return true;
-            }
+            updateStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return false;
     }
 
     public int validarCredenciales(String username, int password) {

@@ -66,14 +66,29 @@ public class loginAtm extends JFrame {
                 char[] contrasena = contrasenaField.getPassword();
                 String contrasenaStr = new String(contrasena);
                 int contrasenaInt = Integer.parseInt(contrasenaStr);
-                // Lógica de validación de inicio de sesión
-                app.validarCredenciales(usuario, contrasenaInt);
-                app.datos(usuario, contrasenaInt);
-                JOptionPane.showMessageDialog(loginAtm.this,
-                        "¡Bienvenido, " + usuario + "!\nHas iniciado sesión correctamente.",
-                        "Inicio de Sesión Exitoso", JOptionPane.INFORMATION_MESSAGE);
-                //menuAtm;
-            }
+
+                
+                if(app.validarCredenciales(usuario, contrasenaInt)){
+                    app.setId(usuario, contrasenaInt);
+                    app.setPinAc(usuario, contrasenaInt);
+                    System.out.println("PIN"+contrasenaInt);
+            
+                    app.setSaldo(usuario, contrasenaInt);
+
+
+                    SwingUtilities.invokeLater(() -> {
+                        menuAtm menu = new menuAtm(app, usuario, contrasenaInt); // Pass 'app' instance here
+                        menu.setVisible(true);
+                    });
+                    //break;
+
+                }else{
+                    //dispose();
+                    contrasenaField.setText("");
+                }   
+            //}
+        }
+            
         });
 
         add(panel);

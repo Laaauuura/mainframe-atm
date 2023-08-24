@@ -19,23 +19,19 @@ public class functionsHisAtm {
         }
     }
 
-    public  boolean registrarOperacion(int usuarioId, String tipoOperacion, double cantidad) {
+    public  void registrarOperacion(int usuarioId, String tipoOperacion, double cantidad) {
             try {
                 String insertQuery = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, ?, ?)";
                 PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
                 insertStatement.setInt(1, usuarioId);
                 insertStatement.setString(2, tipoOperacion);
                 insertStatement.setDouble(3, cantidad);
-                int rowsAffected = insertStatement.executeUpdate();
-
-                if (rowsAffected > 0) {
-                    return true;
-                }
+                insertStatement.executeUpdate();
+        
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            return false;
         }
 
         public  ResultSet obtenerHistorial(int usuarioId) {
